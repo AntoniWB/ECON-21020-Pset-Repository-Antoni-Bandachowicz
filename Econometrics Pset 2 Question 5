@@ -1,0 +1,55 @@
+df <- read.csv("/Users/antonibandachowicz/Downloads/ak91.csv")
+yrs_educ <- df$YRS_EDUC
+wkly_wage <- df$WKLY_WAGE
+degree<-0
+has_college_degree <- yrs_educ == 16
+for (num in has_college_degree){
+  if (num=="TRUE")
+    degree=degree+1
+}
+set<-length(yrs_educ)
+estimator_p=degree/set
+estimator_p
+
+
+# 5b
+wage_sum=0
+count=0
+for (num in 1:length(yrs_educ) ){
+  if (yrs_educ[num]==16){
+    count=count+1
+    wage_sum=wage_sum+wkly_wage[num]
+  }
+}
+
+mu_college<-wage_sum/count
+mu_college
+
+#5c
+
+sum_res<-0
+for (num in 1:length(yrs_educ)){
+  if (yrs_educ[num]==16){
+    residual= (wkly_wage[num]-mu_college)^2
+    sum_res=sum_res+residual
+  }
+}
+n<-set
+p_x<-(length(has_college_degree))/n
+variance=sum_res/(length(has_college_degree)-1)
+se_college=sqrt(variance/p_x)/sqrt(n)
+
+#5d
+uncert<-qnorm(0.975,0,1)*se_college
+CI_95<- c(mu_college-uncert,mu_college+uncert)
+CI_95
+
+#5e
+z<-(mu_college-600)/se_college
+p_val<-2*pnorm(-abs(z),0,1)
+p_val
+
+#5f
+z_2<-(mu_college-595)/se_college
+p_val2<-2*pnorm(-abs(z_2),0,1)
+p_val2
