@@ -1,1 +1,61 @@
+## 6a
+df <- read.csv("/Users/antonibandachowicz/Downloads/ak91 (1).csv")
+n <- nrow(df)
+yrs_educ <- df$YRS_EDUC
+wkly_wage <- df$WKLY_WAGE
+beta<-cov(wkly_wage,yrs_educ)/var(yrs_educ)
+alpha<-mean(wkly_wage)-mean(yrs_educ)*beta
+beta
+alpha
 
+## 6c
+BLP_x16<- alpha + beta*16
+BLP_x16
+
+## 6d
+BLP<-alpha+yrs_educ*beta
+E<-wkly_wage - BLP
+se_numerator<- mean(E^2*(yrs_educ-mean(yrs_educ))^2)
+se <- sqrt(se_numerator)/(var(yrs_educ)*sqrt(n))
+se
+
+## 6e
+t<-(beta-31)/se
+t
+
+## 6f
+p_value<-2*pnorm(t)
+p_value
+
+
+
+
+## 7a
+my_simplecoef <- function(y, x) {
+  beta1<-cov(x,y)/var(x)
+  alpha1<-mean(y)-mean(x)*beta1
+  print(beta1)
+  print(alpha1)
+}
+
+coef=print(my_simplecoef(wkly_wage, yrs_educ))
+
+
+## 7b
+my_simpleblp <- function(coef, x) {
+  numrows=nrow(x)
+  coef1=c(coef[0],coef[1])
+  repeat{
+    append(coef1,0)
+    if (lenght(coef1)==numrows){
+      break
+    }
+  }
+  beta2<-cov(coef1,x)/var(x)
+  alpha2<-mean(coef1)-mean(x)*beta1
+  print(beta2)
+  print(alpha2)
+}
+
+test<-mean(wkly_wage) - mean(my_simpleblp(coef, yrs_educ)) 
+test
