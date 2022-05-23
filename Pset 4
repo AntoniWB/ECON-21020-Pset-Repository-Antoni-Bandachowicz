@@ -1,0 +1,58 @@
+## Question 6
+
+##  6a:
+
+```{r 6a}
+dat <- read.csv("/Users/antonibandachowicz/Downloads/bw06.csv")
+dat <- as.matrix(dat)
+y <- dat[, "birthweight"]
+w <- dat[, "cigsdaily"]
+x <- cbind(1, dat[, c("boy", "age", "highschool",
+"somecollege", "college")]) 
+x_tld <- dat[, "married"]
+
+beta <- cov(y, w) / var(w)
+alpha <- mean(y) - mean(w) * beta
+beta
+
+```
+The coefficient corresponding to $W$ above is the beta coefficient.
+Our calculation tells us that a unit increase in the amount of cigarrets
+smoked daily $W$ is associated with an expected change of -12.77 in the outcome $Y$ (birthweight).
+
+
+## 6b:
+
+according to the Frisch-Waugh Theorem, $\beta_W=\frac{Cov(\tilde{W},\tilde{Y})}{Var(\tilde{W})}$. Therefore: 
+
+```{r 6b}
+#finding blps:
+inv_XX <- solve( t(x) %*% x)
+XY<- t(x) %*% y
+B_yx <- inv_XX %*% XY
+BLPYX <- x %*% B_yx
+Y_tilde <-y-BLPYX
+
+XW <- t(x) %*% w
+B_wx <- inv_XX %*% XW
+BLPWX <- x %*% B_wx
+W_tilde <- w-BLPWX
+
+#finding final coefficient:
+B_W <- cov(Y_tilde, W_tilde)/var(W_tilde)
+B_W
+```
+
+## 6f:
+since both W and X are discrete, we can verify common support.
+all we need to prove is $P(W =w, X =x)>0$ for all (w,x) contained in $supp(W) \times supp(X)$.
+
+
+```{r 6f}
+supp_x <- unique(x)
+supp_w <- unique(w)
+
+supp_w*supp_x
+supp_x
+supp_w
+```
