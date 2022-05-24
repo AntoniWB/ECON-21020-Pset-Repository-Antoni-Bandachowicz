@@ -56,3 +56,8 @@ supp_w*supp_x
 supp_x
 supp_w
 ```
+
+```{r 6fi}
+all_combinations <- expand.grid(x=supp_x, y=supp_w)
+intersection <- intersect(all_combinations,dat)
+```
